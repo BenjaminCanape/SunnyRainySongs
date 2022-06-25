@@ -35,7 +35,7 @@ class _LoadingState extends State<Loading> {
         locationService.locationData?.latitude ?? 0.0,
         locationService.locationData?.longitude ?? 0.0);
 
-    await musicService.searchPlaylist(weatherService.weather);
+    await musicService.searchPlaylist(weatherService.searchText);
     Navigator.pushReplacementNamed(context, '/home', arguments: {
       'weather': weatherService.weather,
       'iconWeather': weatherService.iconWeather,
