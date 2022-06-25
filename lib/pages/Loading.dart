@@ -13,15 +13,16 @@ class Loading extends StatefulWidget {
 }
 
 class _LoadingState extends State<Loading> {
-
-  getWeather() async{
+  getWeather() async {
     Music musicService = Music();
     LocationService locationService = LocationService();
     await locationService.getUserLocation();
     print(locationService.locationData);
     Weather weatherService = Weather();
     LocationData? locationData = locationService.locationData;
-    if (locationData == null || locationData.latitude == null || locationData.latitude == null) {
+    if (locationData == null ||
+        locationData.latitude == null ||
+        locationData.latitude == null) {
       Navigator.pushReplacementNamed(context, '/home', arguments: {
         'weather': weatherService.weather,
         'iconWeather': weatherService.iconWeather,

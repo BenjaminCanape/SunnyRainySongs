@@ -5,7 +5,6 @@ class LocationService {
   late PermissionStatus _permissionGranted;
   LocationData? locationData;
 
-
   Future<void> getUserLocation() async {
     Location location = Location();
 
