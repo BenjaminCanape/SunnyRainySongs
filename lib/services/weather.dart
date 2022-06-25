@@ -8,6 +8,7 @@ class Weather {
 
   String iconWeather = "";
   String weather = "";
+  bool isDay = true;
 
   Future<void> getWeatherResponseFromAPI(
       double latitude, double longitude) async {
@@ -19,6 +20,7 @@ class Weather {
     if (data.isNotEmpty) {
       iconWeather = data['current']?['condition']?['icon'];
       weather = data['current']?['condition']?['text'];
+      isDay = data['current']?['is_day'] != 0;
     }
   }
 }

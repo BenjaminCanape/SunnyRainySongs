@@ -39,6 +39,7 @@ class _LoadingState extends State<Loading> {
     Navigator.pushReplacementNamed(context, '/home', arguments: {
       'weather': weatherService.weather,
       'iconWeather': weatherService.iconWeather,
+      'isDay': weatherService.isDay,
       'playlistsFrames': musicService.playlistFrames
     });
   }

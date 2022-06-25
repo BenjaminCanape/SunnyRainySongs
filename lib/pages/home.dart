@@ -12,7 +12,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   Map data = {};
   String weather = "";
+  String iconWeather = "";
   String search = "";
+  bool isDay = true;
   List<dynamic> playlists = [];
   late WebViewXController webviewController;
   final CarouselController _controller = CarouselController();
@@ -27,42 +29,54 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     data = ModalRoute.of(context)?.settings.arguments as Map;
     weather = data['weather'];
+    isDay = data['isDay'];
+    iconWeather = 'http:' + data['iconWeather'].toString();
     playlists = data['playlistsFrames'];
 
-    return SafeArea(
-      child: Scaffold(
+    Color bgColor = isDay ? Colors.blue.shade200 : Colors.blueGrey.shade900;
+    Color textColor = isDay ? Colors.black : Colors.white;
+
+    print(iconWeather);
+
+    return  Scaffold(
+        backgroundColor: bgColor,
           body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(weather),
-          CarouselSlider(
-            options: CarouselOptions(
-                height: 200.0,
-                enlargeCenterPage: true,
-                aspectRatio: 2.0,
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    _current = index;
-                  });
-                }),
-            items: playlists.map((playlist) {
-              return Builder(
-                builder: (BuildContext context) {
-                  return Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: EdgeInsets.symmetric(horizontal: 5.0),
-                      decoration: BoxDecoration(color: Colors.amber),
-                      child: WebViewX(
-                        initialContent:
-                            '<html><body>${playlist.toString()}</body></html>',
-                        initialSourceType: SourceType.html,
-                        height: 200,
-                        width: 500,
-                        onWebViewCreated: (controller) =>
-                            webviewController = controller,
-                      ));
-                },
-              );
-            }).toList(),
+          Image.network(iconWeather),
+          Text(weather, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: textColor),),
+          SizedBox(height: 80,),
+          Center(
+            child: CarouselSlider(
+              options: CarouselOptions(
+                  height: 200.0,
+                  enlargeCenterPage: true,
+                  aspectRatio: 2.0,
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      _current = index;
+                    });
+                  }),
+              items: playlists.map((playlist) {
+                return Builder(
+                  builder: (BuildContext context) {
+                    return Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.symmetric(horizontal: 5.0),
+                        decoration: BoxDecoration(color: Colors.amber),
+                        child: WebViewX(
+                          initialContent:
+                              '<html><body>${playlist.toString()}</body></html>',
+                          initialSourceType: SourceType.html,
+                          height: 200,
+                          width: 500,
+                          onWebViewCreated: (controller) =>
+                              webviewController = controller,
+                        ));
+                  },
+                );
+              }).toList(),
+            ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -75,16 +89,13 @@ class _HomeState extends State<Home> {
                   margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: (Theme.of(context).brightness == Brightness.dark
-                              ? Colors.white
-                              : Colors.black)
-                          .withOpacity(_current == entry.key ? 0.9 : 0.4)),
+                      color: (textColor).withOpacity(_current == entry.key ? 0.9 : 0.4)),
                 ),
               );
             }).toList(),
           )
         ],
-      )),
+      )
     );
   }
 }
